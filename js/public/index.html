@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplicar Matrices</title>
+    <script>
+        function generarMatrices() {
+            const filas = parseInt(document.getElementById('filas').value);
+            const columnas = parseInt(document.getElementById('columnas').value);
+            const contenedor = document.getElementById('matrices');
+            contenedor.innerHTML = '';
+            
+            if (isNaN(filas) || isNaN(columnas) || filas <= 0 || columnas <= 0) {
+                alert('Ingrese valores válidos para filas y columnas.');
+                return;
+            }
+
+            for (let m = 1; m <= 2; m++) {
+                const matrizDiv = document.createElement('div');
+                matrizDiv.innerHTML = `<h3>Matriz ${m}</h3>`;
+                for (let i = 0; i < filas; i++) {
+                    for (let j = 0; j < columnas; j++) {
+                        matrizDiv.innerHTML += `<input type='number' id='m${m}_${i}_${j}' required>`;
+                    }
+                    matrizDiv.innerHTML += '<br>';
+                }
+                contenedor.appendChild(matrizDiv);
+            }
+            contenedor.innerHTML += '<button onclick="multiplicarMatrices()">Multiplicar Matrices</button>';
+        }
+
+        async function multiplicarMatrices() {
+            const filas = parseInt(document.getElementById('filas').value);
+            const columnas = parseInt(document.getElementById('columnas').value);
+            let matriz1 = [];
+            let matriz2 = [];
+
+            for (let i = 0; i < filas; i++) {
+                let fila1 = [];
+                let fila2 = [];
+                for (let j = 0; j < columnas; j++) {
+                    const val1 = parseFloat(document.getElementById(`m1_${i}_${j}`).value);
+                    const val2 = parseFloat(document.getElementById(`m2_${i}_${j}`).value);
+                    if (isNaN(val1) || isNaN(val2)) {
+                        alert('Todos los valores deben ser numéricos.');
+                        return;
+                    }
+                    fila1.push(val1);
+                    fila2.push(val2);
+                }
+                matriz1.push(fila1);
+                matriz2.push(fila2);
+            }
+
+            const response = await fetch('/multiplicar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ matriz1, matriz2 })
+            });
+
+            const resultado = await response.json();
+            mostrarResultado(resultado.matrizResultado);
+        }
+
+        function mostrarResultado(matriz) {
+            let resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = '<h3>Matriz Resultante</h3>';
+            matriz.forEach(fila => {
+                resultadoDiv.innerHTML += fila.join(' ') + '<br>';
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>Multiplicación de Matrices</h2>
+    <label>Filas: <input type="number" id="filas"></label>
+    <label>Columnas: <input type="number" id="columnas"></label>
+    <button onclick="generarMatrices()">Generar Matrices</button>
+    <div id="matrices"></div>
+    <div id="resultado"></div>
+</body>
+</html>
