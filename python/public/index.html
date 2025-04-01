@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplicar Matrices</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: coral;
+        }
+    </style>
+</head>
+<body>
+    <h2>Multiplicación de Matrices</h2>
+    <label>Filas: <input type="number" id="filas"></label>
+    <label>Columnas: <input type="number" id="columnas"></label>
+    <button onclick="generarMatrices()">Generar Matrices</button>
+    <div id="matrices"></div>
+    <div id="resultado"></div>
     <script>
         function generarMatrices() {
             const filas = parseInt(document.getElementById('filas').value);
@@ -71,13 +86,5 @@
             });
         }
     </script>
-</head>
-<body>
-    <h2>Multiplicación de Matrices</h2>
-    <label>Filas: <input type="number" id="filas"></label>
-    <label>Columnas: <input type="number" id="columnas"></label>
-    <button onclick="generarMatrices()">Generar Matrices</button>
-    <div id="matrices"></div>
-    <div id="resultado"></div>
 </body>
 </html>
